@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SmartNurse.com</title>
+  <link rel="icon" type="jpg" href="https://i.pinimg.com/1200x/5e/cc/0a/5ecc0a6f8123cc6c9ebf7b7df185150a.jpg">
+
+  <!-- Full Functionality + Portrait Tablet Layout (fixed resetData reference error) -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+    :root{
+      --bg: #f4f9ff;
+      --sidebar: #e3f2fd;
+      --card: #ffffff;
+      --primary: #0078d4;
+      --accent: #00a8ff;
+      --muted: #5f6b77;
+      --text: #0f172a;
+      --radius: 10px;
+      --shadow: 0 4px 14px rgba(0,0,0,0.08);
+    }
+
+    *{margin:0; padding:0; box-sizing:border-box;}
+
+    body{
+      font-family:'Inter',sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      display:flex;
+      min-height:100vh;
+    }
+
+    /* PORTRAIT MODE */
+    @media (orientation: portrait) {
+      body{flex-direction:column;}
+
+      .sidebar{
+        width:100%;
+        height:auto;
+        flex-direction:row;
+        justify-content:space-between;
+        align-items:center;
+        padding:14px 20px;
+        border-right:none;
+        border-bottom:1px solid #cfd8dc;
+      }
+
+      .sidebar-footer{display:none;}
+
+      .main{
+        padding:18px;
+      }
+
+      .topbar{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:6px;
+      }
+    }
+
+    /* LANDSCAPE (DEFAULT) */
+    .sidebar{
+      width:260px;
+      background:var(--sidebar);
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      border-right:1px solid #cfd8dc;
+    }
+
+    .sidebar h1{font-size:22px; font-weight:700; color:var(--primary); margin-bottom:20px;}
+
+    .tab-btn{
+      background:linear-gradient(90deg,var(--primary),var(--accent));
+      border:none;
+      border-radius:8px;
+      padding:12px 14px;
+      font-weight:600;
+      color:#fff;
+      cursor:default;
+      font-size:15px;
+      text-align:center;
+    }
+
+    .sidebar-footer{
+      margin-top:auto;
+      font-size:13px;
+      color:var(--muted);
+      text-align:center;
+    }
+
+    .main{
+      flex:1;
+      padding:30px;
+      overflow-y:auto;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:20px;
+    }
+
+    .header-info{
+      background:#e8f3ff;
+      color:#0078d4;
+      padding:8px 14px;
+      border-radius:999px;
+      font-weight:600;
+      font-size:13px;
+    }
+
+    .controls{
+      display:flex;
+      justify-content:flex-end;
+      margin-bottom:14px;
+    }
+
+    .btn-reset{
+      background:linear-gradient(90deg,var(--primary),var(--accent));
+      border:0;
+      padding:10px 14px;
+      border-radius:8px;
+      font-weight:600;
+      color:#fff;
+      cursor:pointer;
+    }
+
+    .btn-reset:hover{
+      color: lightgoldenrodyellow;
+      background-color: lightskyblue;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:18px;
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:var(--shadow);
+      border:1px solid #e2e8f0;
+    }
+
+    .bed-number{
+      background:#7abaff;
+      color:#f0f8ff;
+      padding:6px 12px;
+      border-radius:999px;
+      font-weight:600;
+      display:inline-block;
+      margin-bottom:12px;
+    }
+
+    .medicine-list{display:flex;flex-direction:column;gap:10px;}
+
+    .medicine{
+      background:#f9fafb;
+      border:1px solid #e5e7eb;
+      border-radius:8px;
+      padding:10px 12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:14px;
+    }
+
+    .medicine strong{color:var(--primary);}    
+
+    .btn-status{
+      border:0;
+      padding:8px 10px;
+      border-radius:6px;
+      font-weight:600;
+      cursor:pointer;
+    }
+    .btn-taken{background:#22c55e;color:white;}
+    .btn-not-taken{background:#ef4444;color:white;}
+    .btn-taken:hover{
+      background: lightgreen;
+    }
+    .btn-not-taken:hover{
+      background: #ff4c4c;
+    }
+    .tab-btn:hover{
+      cursor: pointer;
+    }
+    .logo{
+      cursor: default;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <div>
+      <h1 class="logo">Smart Nurse 👨‍⚕️</h1>
+      <button class="tab-btn">Patients</button>
+    </div>
+    <div class="sidebar-footer">© 2025 Smart Nurse 🏥</div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <h2>Patients</h2>
+      <div class="header-info">Ward A • Nurse Shri 👩‍⚕️</div>
+    </div>
+
+    <div class="controls">
+      <!-- resetData is defined below; keeping onclick for simplicity -->
+      <button class="btn-reset" onclick="resetData()">🔄 Reset Data</button>
+    </div>
+
+    <div id="grid" class="grid"></div>
+  </div>
+
+  <script>
+    // Data
+    const defaultBeds = [
+      { id: 1, name: 'BED 1', medicines: [
+        { name: 'Paracetamol', dose: '500 mg', schedule: '2 times/day', taken: false },
+        { name: 'Vitamin C', dose: '100 mg', schedule: '1 time/day', taken: false },
+        { name: 'Amoxicillin', dose: '250 mg', schedule: '1 time/day', taken: false }
+      ]},
+      { id: 2, name: 'BED 2', medicines: [
+        { name: 'Ibuprofen', dose: '400 mg', schedule: '2 times/day', taken: false },
+        { name: 'Pantoprazole', dose: '40 mg', schedule: '1 time/day', taken: false },
+        { name: 'Iron Supplement', dose: '325 mg', schedule: '1 time/day', taken: false }
+      ]},
+      { id: 3, name: 'BED 3', medicines: [
+        { name: 'Cetrizine', dose: '10 mg', schedule: '1 time/day', taken: false },
+        { name: 'Metformin', dose: '500 mg', schedule: '2 times/day', taken: false },
+        { name: 'Zincovit', dose: '1 tablet', schedule: '1 time/day', taken: false }
+      ]},
+      { id: 4, name: 'BED 4', medicines: [
+        { name: 'Aspirin', dose: '75 mg', schedule: '1 time/day', taken: false },
+        { name: 'Calcium D3', dose: '600 mg', schedule: '1 time/day', taken: false },
+        { name: 'Dolo 650', dose: '650 mg', schedule: '2 times/day', taken: false }
+      ]},
+      { id: 5, name: 'BED 5', medicines: [
+        { name: 'Ranitidine', dose: '150 mg', schedule: '2 times/day', taken: false },
+        { name: 'Prednisolone', dose: '20 mg', schedule: '1 time/day', taken: false },
+        { name: 'Multivitamin', dose: '1 tablet', schedule: '1 time/day', taken: false }
+      ]},
+      { id: 6, name: 'BED 6', medicines: [
+        { name: 'Losartan', dose: '50 mg', schedule: '1 time/day', taken: false },
+        { name: 'Azithromycin', dose: '500 mg', schedule: '1 time/day', taken: false },
+        { name: 'Vitamin B12', dose: '500 mcg', schedule: '1 time/day', taken: false }
+      ]},
+      { id: 7, name: 'BED 7', medicines: [
+        { name: 'Omeprazole', dose: '20 mg', schedule: '1 time/day', taken: false },
+        { name: 'Clarithromycin', dose: '500 mg', schedule: '2 times/day', taken: false },
+        { name: 'Folic Acid', dose: '5 mg', schedule: '1 time/day', taken: false }
+      ]}
+    ];
+
+    // Utilities
+    function clone(obj){
+      try { return structuredClone(obj); } catch(e) { return JSON.parse(JSON.stringify(obj)); }
+    }
+
+    // Load or initialize beds data
+    let beds = (function(){
+      try {
+        const raw = localStorage.getItem('bedsData');
+        return raw ? JSON.parse(raw) : clone(defaultBeds);
+      } catch(e) {
+        return clone(defaultBeds);
+      }
+    })();
+
+    // Save to localStorage
+    function saveData(){
+      try { localStorage.setItem('bedsData', JSON.stringify(beds)); } catch(e) { console.warn('Could not save to localStorage', e); }
+    }
+
+    // Toggle taken state
+    function toggleTaken(bedId, medIndex){
+      const bed = beds.find(b=>b.id===bedId);
+      if(!bed) return;
+      const med = bed.medicines[medIndex];
+      if(!med) return;
+      med.taken = !med.taken;
+      med.timestamp = med.taken ? new Date().toISOString() : null;
+      saveData();
+      render();
+    }
+
+    // Reset data (defined so onclick in markup works)
+    function resetData(){
+      if(window.confirm('Are you sure you want to reset all medicine data?')){
+        beds = clone(defaultBeds);
+        saveData();
+        render();
+      }
+    }
+
+    // Format ISO time to readable
+    function formatTime(iso){
+      if(!iso) return '';
+      const d = new Date(iso);
+      return d.toLocaleString();
+    }
+
+    // Render UI
+    function render(){
+      const grid = document.getElementById('grid');
+      if(!grid) return;
+      grid.innerHTML = '';
+
+      beds.forEach(b => {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const bedTitle = document.createElement('div');
+        bedTitle.className = 'bed-title';
+        bedTitle.innerHTML = `<div class="bed-number">${b.name}</div>`;
+
+        const list = document.createElement('div');
+        list.className = 'medicine-list';
+
+        b.medicines.forEach((m, mi) => {
+          const med = document.createElement('div');
+          med.className = 'medicine';
+
+          const left = document.createElement('div');
+          left.innerHTML = `<div><strong>${m.name}</strong> — ${m.dose}, ${m.schedule}<div style="font-size:12px;color:var(--muted);margin-top:6px">${m.timestamp ? 'Taken at: ' + formatTime(m.timestamp) : ''}</div></div>`;
+
+          const btn = document.createElement('button');
+          btn.className = 'btn-status ' + (m.taken ? 'btn-taken' : 'btn-not-taken');
+          btn.textContent = m.taken ? 'Taken' : 'Not Taken';
+          btn.onclick = function(){ toggleTaken(b.id, mi); };
+
+          med.appendChild(left);
+          med.appendChild(btn);
+          list.appendChild(med);
+        });
+
+        card.appendChild(bedTitle);
+        card.appendChild(list);
+        grid.appendChild(card);
+      });
+    }
+
+    // Initial render
+    render();
+
+    // Expose functions to global for debugging (optional)
+    window._app = { resetData, toggleTaken, saveData, render };
+  </script>
+</body>
+</html>
